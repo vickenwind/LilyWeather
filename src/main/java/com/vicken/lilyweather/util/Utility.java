@@ -1,5 +1,6 @@
 package com.vicken.lilyweather.util;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -10,6 +11,7 @@ import com.vicken.lilyweather.model.County;
 import com.vicken.lilyweather.model.Province;
 import com.vicken.lilyweather.model.jsonmodel.Address;
 import com.vicken.lilyweather.model.jsonmodel.AddressInfo;
+import com.vicken.lilyweather.model.jsonweather.Status;
 
 import java.util.List;
 
@@ -139,5 +141,33 @@ public class Utility {
 //        }
 //        return false;
 //    }
+
+    /**
+     *  解析服务器返回的JSON 数据，并将解析出的数据存储到本地。
+     */
+    public static void handleWeatherResponse(Context context, String response) {
+//        try {
+//            JSONObject jsonObject = new JSONObject(response);
+//            JSONObject weatherInfo = jsonObject.getJSONObject("weatherinfo");
+//            String cityName = weatherInfo.getString("city");
+//            String weatherCode = weatherInfo.getString("cityid");
+//            String temp1 = weatherInfo.getString("temp1");
+//            String temp2 = weatherInfo.getString("temp2");
+//            String weatherDesp = weatherInfo.getString("weather");
+//            String publishTime = weatherInfo.getString("ptime");
+//            saveWeatherInfo(context, cityName, weatherCode, temp1, temp2,
+//                    weatherDesp, publishTime);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+        Gson gson=new Gson();
+        Status status = gson.fromJson(response,new TypeToken<Status>(){}.getType());
+        String cityName = status.getResult().getData().getRealtime().getCity_name();
+        String weatherCode = status.getResult().getData().getRealtime().getCity_code();
+        String temp1 = status.getResult().getData().getWeather().get(0).getInfo().getDay()[2];
+            String temp2 = status.getResult().getData().getWeather().get(0).getInfo().getNight()[2];
+            String weatherDesp = status.getResult().getData().getRealtime().getWeather().getInfo();
+            String publishTime = status.getResult().getData().getRealtime().getTime();
+    }
 
 }
