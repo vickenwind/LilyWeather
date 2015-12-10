@@ -21,10 +21,12 @@ public class HttpUtil {
                 HttpURLConnection conn=null;
                 try {
                     URL url=new URL(address);
+//                    URL url=new URL("http://www.baidu.com/");
                     conn=(HttpURLConnection)url.openConnection();
                     conn.setRequestMethod("GET");
-                    conn.setConnectTimeout(50000);
+                    conn.setConnectTimeout(8000);
                     conn.setReadTimeout(8000);
+                    conn.setDoInput(true);
                     InputStream in=conn.getInputStream();
                     BufferedReader reader=new BufferedReader(new InputStreamReader(in));
                     StringBuilder response =new StringBuilder();
@@ -40,6 +42,7 @@ public class HttpUtil {
                     if(listener!=null){
                         //回调onError()方法
                         listener.onError(e);
+//                        e.getStackTrace();
                     }
                 } finally {
                     if(conn!=null){
