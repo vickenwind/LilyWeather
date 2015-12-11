@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.vicken.lilyweather.R;
+import com.vicken.lilyweather.receiver.AutoUpdateReceiver;
+import com.vicken.lilyweather.service.AutoUpdateService;
 import com.vicken.lilyweather.util.HttpCallbackListener;
 import com.vicken.lilyweather.util.HttpUtil;
 import com.vicken.lilyweather.util.Utility;
@@ -199,6 +201,8 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
         currentDateText.setText(prefs.getString("current_date", ""));
         weatherInfoLayout.setVisibility(View.VISIBLE);
         cityNameText.setVisibility(View.VISIBLE);
+        Intent i=new Intent(this, AutoUpdateService.class);
+        startService(i);
     }
 
     public static String urlencode(Map<String, ?> data) {
