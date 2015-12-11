@@ -10,7 +10,7 @@ public class Data {
     private Realtime realtime;
     private Life life;
     private List<Weather> weather;
-    private Pm25 pm25;
+//    private Pm25 pm25;//有些地区没有PM25的值
     private String date;
 
     @Override
@@ -19,7 +19,7 @@ public class Data {
                 "realtime=" + realtime +
                 ", life=" + life +
                 ", weather=" + weather +
-                ", pm25=" + pm25 +
+//                ", pm25=" + pm25 +
                 ", date='" + date + '\'' +
                 ", isForeign='" + isForeign + '\'' +
                 '}';
@@ -49,13 +49,13 @@ public class Data {
         this.weather = weather;
     }
 
-    public Pm25 getPm25() {
-        return pm25;
-    }
-
-    public void setPm25(Pm25 pm25) {
-        this.pm25 = pm25;
-    }
+//    public Pm25 getPm25() {
+//        return pm25;
+//    }
+//
+//    public void setPm25(Pm25 pm25) {
+//        this.pm25 = pm25;
+//    }
 
     public String getDate() {
         return date;

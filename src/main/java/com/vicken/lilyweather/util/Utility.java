@@ -1,6 +1,9 @@
 package com.vicken.lilyweather.util;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -13,7 +16,10 @@ import com.vicken.lilyweather.model.jsonmodel.Address;
 import com.vicken.lilyweather.model.jsonmodel.AddressInfo;
 import com.vicken.lilyweather.model.jsonweather.Status;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by ccit on 2015/12/9.
@@ -113,7 +119,7 @@ public class Utility {
                 for(AddressInfo info:addressInfos){
                     County county=new County();
                     county.setCountyCode(info.getId());
-                    county.setCountyName(info.getFullName());
+                    county.setCountyName(info.getName());
                     county.setCityId(cityId);
                     lilyWeatherDB.saveCounty(county);
                 }
@@ -161,13 +167,35 @@ public class Utility {
 //            e.printStackTrace();
 //        }
         Gson gson=new Gson();
-        Status status = gson.fromJson(response,new TypeToken<Status>(){}.getType());
+        Status status = gson.fromJson(response, new TypeToken<Status>() {
+        }.getType());
         String cityName = status.getResult().getData().getRealtime().getCity_name();
         String weatherCode = status.getResult().getData().getRealtime().getCity_code();
+
         String temp1 = status.getResult().getData().getWeather().get(0).getInfo().getDay()[2];
-            String temp2 = status.getResult().getData().getWeather().get(0).getInfo().getNight()[2];
-            String weatherDesp = status.getResult().getData().getRealtime().getWeather().getInfo();
-            String publishTime = status.getResult().getData().getRealtime().getTime();
+        String temp2 = status.getResult().getData().getWeather().get(0).getInfo().getNight()[2];
+        String weatherDesp = status.getResult().getData().getRealtime().getWeather().getInfo();
+        String publishTime = status.getResult().getData().getRealtime().getTime();
+        saveWeatherInfo(context, cityName, weatherCode, temp1, temp2,
+                weatherDesp, publishTime);
     }
+    /**
+     *  将服务器返回的所有天气信息存储到SharedPreferences 文件中。
+     */
+    public static void saveWeatherInfo(Context context,String cityName,String weatherCode,String temp1,String temp2,String weatherDesp,String publishTime){
+
+
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy年M月d日", Locale.CHINA);
+        SharedPreferences.Editor preferences=  PreferenceManager.getDefaultSharedPreferences(context).edit();
+        preferences.putBoolean("city_selected", true);
+        preferences.putString("city_name", cityName);
+        preferences.putString("weather_name", cityName);
+        preferences.putString("temp1", temp1);
+        preferences.putString("temp2", temp2);
+        preferences.putString("weather_desp", weatherDesp);
+        preferences.putString("publish_time", publishTime);
+        preferences.putString("current_date", sdf.format(new Date()));
+        preferences.commit();
+        }
 
 }
